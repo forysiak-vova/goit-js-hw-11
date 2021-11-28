@@ -25,3 +25,16 @@
   background-size: cover;
   background-position: center;
 }
+.search-form {
+  position: fixed;
+  z-index: 999;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  height: 40px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  background-color: blue;
+  padding: 5px;
+}
