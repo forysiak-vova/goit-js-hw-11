@@ -1,4 +1,7 @@
 import './sass/main.scss';
+import axios from 'axios';
+
+ axios.get('https://pixabay.com/api/?key=24625422-24625422-32b02834f3df76db1a58654ff&q=yellow+flowers&image_type=photo');
 
 
 const form = document.getElementById('search-form');
