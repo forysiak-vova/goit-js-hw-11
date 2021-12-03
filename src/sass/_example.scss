@@ -25,16 +25,44 @@
   background-size: cover;
   background-position: center;
 }
+// .search-form {
+//   position: fixed;
+//   z-index: 999;
+//   display: flex;
+//   align-content: center;
+//   justify-content: center;
+//   height: 40px;
+//   margin: auto;
+//   left: 0;
+//   right: 0;
+//   background-color: blue;
+//   padding: 5px;
+// }
+
+// .gallery {
+//   background-color: grey;
+//   display: grid;
+//   grid-template-columns: repeat(5, 270px);
+//   gap: 30px;
+// }
 .search-form {
   position: fixed;
   z-index: 999;
+  top: 0;
+  left: 0;
   display: flex;
   align-content: center;
   justify-content: center;
   height: 40px;
-  margin: auto;
-  left: 0;
-  right: 0;
-  background-color: blue;
-  padding: 5px;
+  padding: 5px calc(50% - 126px);
+  background-color: brown;
+}
+.gallery {
+  background-color: burlywood;
+  display: grid;
+  grid-template-columns: repeat(4, 270px);
+  gap: 30px;
+  margin-top: 40px;
+  justify-content: center;
+  padding-top: 20px;
 }
