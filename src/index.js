@@ -18,7 +18,7 @@ async function getUser(name) {
     console.log(resOfRespons);
    const res = resOfRespons.reduce((acc, el) => (acc += `
 <div class="photo-card">
-  <img src=${el.previewURL} alt=${el.tags} loading="lazy" width="250"/>
+  <img src=${el.previewURL} alt=${el.tags} loading="lazy" width="250" height = "200px"/>
   <div class="info">
     <p class="info-item">
       <b>Likes<p>${el.likes}</p></b>
