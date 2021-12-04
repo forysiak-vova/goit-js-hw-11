@@ -1,5 +1,8 @@
 import './sass/main.scss';
 import axios from 'axios';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 
 
 async function getUser(name) {
@@ -16,33 +19,37 @@ async function getUser(name) {
     });
     const resOfRespons = response.data.hits;
     console.log(resOfRespons);
+  
    const res = resOfRespons.reduce((acc, el) => (acc += `
 <div class="photo-card">
-  <img src=${el.previewURL} alt=${el.tags} loading="lazy" width="250" height = "200px"/>
+<a href="${el.largeImageURL}">
+  <img src=${el.webformatURL} alt=${el.tags} loading="lazy" width="250" height = "180" class = "image"/>
+  </a>
   <div class="info">
     <p class="info-item">
-      <b>Likes<p>${el.likes}</p></b>
+      <b>Likes ${el.likes}</b>
     </p>
     <p class="info-item">
-      <b>Views${el.views}</b>
+      <b>Views ${el.views}</b>
     </p>
     <p class="info-item">
-      <b>Comments${el.comments}</b>
+      <b>Comments ${el.comments}</b>
     </p>
     <p class="info-item">
-      <b>Downloads${el.downloads}</b>
+      <b>Downloads ${el.downloads}</b>
     </p>
   </div>
 </div>
+
     `), '')
     
     gallery.innerHTML = res;
-    
+ 
   } catch (error) {
     console.error(error);
   }
+  imageOfLightbox();
 }
-
 
 
 const gallery = document.querySelector('.gallery');
@@ -56,7 +63,7 @@ function onFormSubmit(e) {
    // console.log(getValue);
    form.reset();
   getUser(getValue);
-  
+ 
 }
 
 // function onFechSucces(images) {
@@ -83,3 +90,19 @@ function onFormSubmit(e) {
 //    return Promise.resolve(fruit[name])
 // }
 //  getFruits().then(console.log)
+
+
+
+// const lightbox = new SimpleLightbox(".gallery a",{ captionDelay: 250, captionsData: 'alt' });
+
+
+function imageOfLightbox() {
+    let lightbox = new SimpleLightbox(".gallery a", {
+  captionSelector: "img", 
+  captionsData: "alt", 
+  captionPosition: "bottom", 
+  captionDelay: 250, 
+  showCounter: false, 
+  scrollZoom: false, 
+});
+}
