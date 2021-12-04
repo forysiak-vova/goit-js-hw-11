@@ -29,14 +29,17 @@
 .search-form {
   position: fixed;
   z-index: 999;
-  top: 0;
-  left: 0;
   display: flex;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 0;
   align-content: center;
   justify-content: center;
   height: 40px;
-  padding: 5px calc(50% - 126px);
-  background-color: blue;
+
+  // padding: 5px calc(50% - 120px);
+  background-color: bisque;
 }
 .search-input {
   padding: 5px;
@@ -48,7 +51,7 @@
   margin-top: 40px;
   justify-content: center;
   padding-top: 20px;
-  background-color: blue;
+  background-color: bisque;
 }
 .photo-card {
   position: relative;
@@ -59,8 +62,13 @@
   transform: scale(1.1);
   transition-duration: 1s;
 }
+.photo-card:focus {
+  transform: scale(1.1);
+  transition-duration: 1s;
+}
 .image {
   box-shadow: 10px 10px 10px #000;
+  border-radius: 5px;
 }
 .info {
   position: absolute;

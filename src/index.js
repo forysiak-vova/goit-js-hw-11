@@ -2,11 +2,12 @@ import './sass/main.scss';
 import axios from 'axios';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import Notiflix from 'notiflix';
 
-
+let page = 1;
 
 async function getUser(name) {
-  try {
+  // try {
     const response = await axios.get('https://pixabay.com/api/?key=24625422-32b02834f3df76db1a58654ff', {
       params: {
        q: `${name}`,
@@ -19,6 +20,7 @@ async function getUser(name) {
     });
     const resOfRespons = response.data.hits;
     console.log(resOfRespons);
+   try { 
   
    const res = resOfRespons.reduce((acc, el) => (acc += `
 <div class="photo-card">
@@ -46,7 +48,7 @@ async function getUser(name) {
     gallery.innerHTML = res;
  
   } catch (error) {
-    console.error(error);
+    Notiflix.Notify.failure('Oops, there is no country with that name')
   }
   imageOfLightbox();
 }
@@ -54,17 +56,39 @@ async function getUser(name) {
 
 const gallery = document.querySelector('.gallery');
 const form = document.getElementById('search-form');
+// const btn = document.querySelector('.load-more');
+// console.log(btn)
 
 form.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(e) {
    e.preventDefault();
-   const getValue = e.currentTarget.elements.searchQuery.value;
-   // console.log(getValue);
-   form.reset();
+  const getValue = e.currentTarget.elements.searchQuery.value;
+  form.reset();
+  
   getUser(getValue);
- 
+  
 }
+
+window.addEventListener('scroll', () => {
+  const documentRect = document.documentElement.getBoundingClientRect();
+  console.log('top', documentRect.top);
+  console.log('bottom', documentRect.bottom);
+  page++;
+})
+
+function imageOfLightbox() {
+    const lightbox = new SimpleLightbox(".gallery a", {
+  captionSelector: "img", 
+  captionsData: "alt", 
+  captionPosition: "bottom", 
+  captionDelay: 250, 
+  showCounter: false, 
+  scrollZoom: false, 
+});
+}
+
+
 
 // function onFechSucces(images) {
 //   console.log(images)
@@ -91,18 +115,3 @@ function onFormSubmit(e) {
 // }
 //  getFruits().then(console.log)
 
-
-
-// const lightbox = new SimpleLightbox(".gallery a",{ captionDelay: 250, captionsData: 'alt' });
-
-
-function imageOfLightbox() {
-    let lightbox = new SimpleLightbox(".gallery a", {
-  captionSelector: "img", 
-  captionsData: "alt", 
-  captionPosition: "bottom", 
-  captionDelay: 250, 
-  showCounter: false, 
-  scrollZoom: false, 
-});
-}
