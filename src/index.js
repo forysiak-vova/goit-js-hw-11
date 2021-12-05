@@ -1,92 +1,185 @@
 import './sass/main.scss';
-import axios from 'axios';
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
+import renderCard  from './templase/markup.hbs';
+import imageOfLightbox from './js/lightbox.js';
+import  {apiServer} from './js/apiServer.js'
 
-let page = 1;
 
-async function getUser(name) {
-  // try {
-    const response = await axios.get('https://pixabay.com/api/?key=24625422-32b02834f3df76db1a58654ff', {
-      params: {
-       q: `${name}`,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        safesearch: 'true',
-        page: 1,
-        per_page: 40,  
-      },
-    });
-    const resOfRespons = response.data.hits;
-    console.log(resOfRespons);
-   try { 
-  
-   const res = resOfRespons.reduce((acc, el) => (acc += `
-<div class="photo-card">
-<a href="${el.largeImageURL}">
-  <img src=${el.webformatURL} alt=${el.tags} loading="lazy" width="250" height = "180" class = "image"/>
-  </a>
-  <div class="info">
-    <p class="info-item">
-      <b>Likes ${el.likes}</b>
-    </p>
-    <p class="info-item">
-      <b>Views ${el.views}</b>
-    </p>
-    <p class="info-item">
-      <b>Comments ${el.comments}</b>
-    </p>
-    <p class="info-item">
-      <b>Downloads ${el.downloads}</b>
-    </p>
-  </div>
-</div>
-
-    `), '')
-    
-    gallery.innerHTML = res;
- 
-  } catch (error) {
-    Notiflix.Notify.failure('Oops, there is no country with that name')
-  }
-  imageOfLightbox();
-}
+const ApiServer = new apiServer();
 
 
 const gallery = document.querySelector('.gallery');
 const form = document.getElementById('search-form');
-// const btn = document.querySelector('.load-more');
-// console.log(btn)
+// const divEl = document.querySelector('.divEl');
+
+
 
 form.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(e) {
-   e.preventDefault();
-  const getValue = e.currentTarget.elements.searchQuery.value;
+  e.preventDefault();
+  ApiServer.serchQuery = e.currentTarget.elements.searchQuery.value;
+  console.log(ApiServer.serchQuery)
+  if (ApiServer.serchQuery === '') {
+    Notiflix.Notify.failure('error')
+    return;
+  }
+  ApiServer.resetPage();
+  ApiServer.fetch()
+  console.log(ApiServer.fetch)
+    clearPage();
+    renderCardMarkup( ApiServer.fetch);
+
+  
+  // imageOfLightbox();
   form.reset();
   
-  getUser(getValue);
+}
+
+function clearPage() {
+  gallery.innerHTML = '';
+}
+
+function renderCardMarkup(response) {
+  gallery.insertAdjacentHTML('beforeend', renderCard(response))
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// async function getUser(name, page = 1) {
+//   try {
+//     const response = await axios.get('https://pixabay.com/api/?key=24625422-32b02834f3df76db1a58654ff', {
+//       params: {
+//        q: `${name}`,
+//         image_type: 'photo',
+//         orientation: 'horizontal',
+//         safesearch: 'true',
+//         page: `${page}`,
+//         per_page: 40,  
+//       },
+//     });
+//   console.log(response);
+//     const resOfRespons = response.data.hits;
+//   console.log(resOfRespons);
+
+    
+//      if (resOfRespons.length === 0) {
+//         Notiflix.Notify.failure('Oops, there is no country with that name')
+//      }
+//    const res = resOfRespons.reduce((acc, el) => (acc += `
+// <div class="photo-card">
+// <a href="${el.largeImageURL}">
+//   <img src=${el.webformatURL} alt=${el.tags} loading="lazy" width="250" height = "180" class = "image"/>
+//   </a>
+//   <div class="info">
+//     <p class="info-item">
+//       <b>Likes ${el.likes}</b>
+//     </p>
+//     <p class="info-item">
+//       <b>Views ${el.views}</b>
+//     </p>
+//     <p class="info-item">
+//       <b>Comments ${el.comments}</b>
+//     </p>
+//     <p class="info-item">
+//       <b>Downloads ${el.downloads}</b>
+//     </p>
+//   </div>
+// </div>
+
+//     `), '')
+    
+//     gallery.innerHTML = res;
+ 
+//   } catch (error) {
+//     Notiflix.Notify.failure('Oops, there is no country with that name')
+//   }
+//   imageOfLightbox();
+
+
+
   
-}
+// }
 
-window.addEventListener('scroll', () => {
-  const documentRect = document.documentElement.getBoundingClientRect();
-  console.log('top', documentRect.top);
-  console.log('bottom', documentRect.bottom);
-  page++;
-})
 
-function imageOfLightbox() {
-    const lightbox = new SimpleLightbox(".gallery a", {
-  captionSelector: "img", 
-  captionsData: "alt", 
-  captionPosition: "bottom", 
-  captionDelay: 250, 
-  showCounter: false, 
-  scrollZoom: false, 
-});
-}
+// const gallery = document.querySelector('.gallery');
+// const form = document.getElementById('search-form');
+// const divEl = document.querySelector('.divEl');
+
+
+
+// form.addEventListener('submit', onFormSubmit);
+
+// function onFormSubmit(e) {
+//    e.preventDefault();
+//   const getValue = e.currentTarget.elements.searchQuery.value;
+//   form.reset();
+//   getUser(getValue);
+// }
+
+
+
+
+
+
+//    window.addEventListener('scroll', () => {
+//   const documentRect = document.documentElement.getBoundingClientRect();
+//   console.log('top', documentRect.top);
+//      console.log('bottom', documentRect.bottom);
+//      if (documentRect.bottom < document.documentElement.clientHeight + 150) {
+//         page++;
+//         console.log('PAGE:',page++)
+      
+//      }
+//  })
+  
+
+
+// function imageOfLightbox() {
+//     const lightbox = new SimpleLightbox(".gallery a", {
+//   captionSelector: "img", 
+//   captionsData: "alt", 
+//   captionPosition: "bottom", 
+//   captionDelay: 250, 
+//   showCounter: false, 
+//   scrollZoom: false, 
+// });
+// }
 
 
 
@@ -114,4 +207,78 @@ function imageOfLightbox() {
 //    return Promise.resolve(fruit[name])
 // }
 //  getFruits().then(console.log)
+// ================================================= скрол =================================
+
+// const onEntry = entries => {
+    
+//     entries.forEach(entry => {
+//         if (entry.isIntersecting && photoApiService.query !== '') {
+//             photoApiService.fetchPhoto().then(renderCardMarkup)
+//         }
+//     });
+// }
+// const options = {
+//     rootMargin: '200px'
+// }
+
+
+// const observer = new IntersectionObserver(onEntry, options)
+
+// observer.observe(refs.divEl)
+
+
+// async function getUser(name, page = 1) {
+  
+//     const response = await axios.get('https://pixabay.com/api/?key=24625422-32b02834f3df76db1a58654ff', {
+//       params: {
+//        q: `${name}`,
+//         image_type: 'photo',
+//         orientation: 'horizontal',
+//         safesearch: 'true',
+//         page: `${page}`,
+//         per_page: 40,  
+//       },
+//     });
+//   console.log(response);
+//     const resOfRespons = response.data.hits;
+//   console.log(resOfRespons);
+   
+    
+//      if (resOfRespons.length === 0) {
+//         Notiflix.Notify.failure('Oops, there is no country with that name')
+//      }
+//      return resOfRespons;
+// };
+
+
+   
+// async function renderImage(img) {
+   
+//   try {
+//     const data = await getUser({img});
+//     console.log('data',data)
+    
+    
+//         gallery.innerHTML = res;
+     
+//   } catch (error) {
+//     console.log(error);
+//   }
+  
+//  imageOfLightbox();
+// }
+
+
+
+// function onFormSubmit(e) {
+//    e.preventDefault();
+//   const getValue = e.currentTarget.elements.searchQuery.value;
+//   form.reset();
+//   page = 1;
+   
+//   getUser(getValue);
+ 
+  
+// }
+// =======================================================================================================================
 
