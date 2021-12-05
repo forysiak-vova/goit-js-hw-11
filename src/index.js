@@ -30,11 +30,12 @@ function onFormSubmit(e) {
     }
     ApiServer.resetPage();
     ApiServer.fetch().then(response => {
+     
       const hits = response.data.hits
       if (hits.length === 0) {
-         Notiflix.Notify.failure('error')
+         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
        }
-      ApiServer.incrementPage();
+     
       clearPage();
     
       renderCardMarkup(hits);
