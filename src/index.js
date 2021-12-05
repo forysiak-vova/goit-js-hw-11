@@ -1,8 +1,11 @@
 import './sass/main.scss';
 import Notiflix from 'notiflix';
 import renderCard  from './templase/markup.hbs';
-import imageOfLightbox from './js/lightbox.js';
+import {imageOfLightbox} from './js/lightbox.js';
 import  {apiServer} from './js/apiServer.js'
+// import axios from 'axios';
+// import SimpleLightbox from 'simplelightbox';
+// import 'simplelightbox/dist/simple-lightbox.min.css';
 
 
 const ApiServer = new apiServer();
@@ -10,7 +13,7 @@ const ApiServer = new apiServer();
 
 const gallery = document.querySelector('.gallery');
 const form = document.getElementById('search-form');
-// const divEl = document.querySelector('.divEl');
+const divEl = document.querySelector('.divEl');
 
 
 
@@ -19,20 +22,30 @@ form.addEventListener('submit', onFormSubmit);
 function onFormSubmit(e) {
   e.preventDefault();
   ApiServer.serchQuery = e.currentTarget.elements.searchQuery.value;
-  console.log(ApiServer.serchQuery)
-  if (ApiServer.serchQuery === '') {
-    Notiflix.Notify.failure('error')
-    return;
+
+  try {
+    if (ApiServer.serchQuery === '') {
+      Notiflix.Notify.failure('error')
+      return;
+    }
+    ApiServer.resetPage();
+    ApiServer.fetch().then(response => {
+      const hits = response.data.hits
+      if (hits.length === 0) {
+         Notiflix.Notify.failure('error')
+       }
+      ApiServer.incrementPage();
+      clearPage();
+    
+      renderCardMarkup(hits);
+  
+    }).finally(form.reset());
+
+  } catch (error) {
+    console.log(error)
   }
-  ApiServer.resetPage();
-  ApiServer.fetch()
-  console.log(ApiServer.fetch)
-    clearPage();
-    renderCardMarkup( ApiServer.fetch);
 
   
-  // imageOfLightbox();
-  form.reset();
   
 }
 
@@ -41,8 +54,32 @@ function clearPage() {
 }
 
 function renderCardMarkup(response) {
-  gallery.insertAdjacentHTML('beforeend', renderCard(response))
+  gallery.insertAdjacentHTML('beforeend', renderCard(response));
+  imageOfLightbox();
 }
+
+
+const onEntry = entries => {
+     
+    entries.forEach(entry => {
+        if (entry.isIntersecting && ApiServer.serchQuery !== '') {
+          ApiServer.fetch().then(response => {
+            const hits = response.data.hits
+            renderCardMarkup(hits);
+            
+          })
+        }
+    });
+}
+const options = {
+    rootMargin: '200px'
+}
+
+
+const observer = new IntersectionObserver(onEntry, options)
+
+observer.observe(divEl)
+
 
 
 

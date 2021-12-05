@@ -1,5 +1,5 @@
 import axios from 'axios';
-const apiKey = '24625422-32b02834f3df76db1a58654ff';
+
 
 export class apiServer {
    constructor() {
@@ -7,8 +7,8 @@ export class apiServer {
       this.page = 1;
    }
    fetch() {
-      // const url = `https://pixabay.com/api/?key=${apiKey}`
-        const response = axios.get(`https://pixabay.com/api/?key=${apiKey}`, {
+     
+        return axios.get('https://pixabay.com/api/?key=24625422-32b02834f3df76db1a58654ff', {
       params: {
        q: `${this.serchQuery}`,
         image_type: 'photo',
@@ -18,10 +18,6 @@ export class apiServer {
         per_page: 40,  
       },
         });
-      // this.incrementPage();
-    
-   
-       return response;
    }
 
    incrementPage() {

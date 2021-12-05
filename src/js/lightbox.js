@@ -1,7 +1,7 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-function imageOfLightbox() {
+export function imageOfLightbox() {
     const lightbox = new SimpleLightbox(".gallery a", {
   captionSelector: "img", 
   captionsData: "alt", 
@@ -9,6 +9,6 @@ function imageOfLightbox() {
   captionDelay: 250, 
   showCounter: false, 
   scrollZoom: false, 
-});
+    });
+   return lightbox;
 }
-export default imageOfLightbox();
