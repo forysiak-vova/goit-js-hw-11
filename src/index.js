@@ -25,29 +25,30 @@ function onFormSubmit(e) {
 
   try {
     if (ApiServer.serchQuery === '') {
-      Notiflix.Notify.failure('error')
+      Notiflix.Notify.failure('please, enter text')
       return;
     }
     ApiServer.resetPage();
     ApiServer.fetch().then(response => {
-     
-      const hits = response.data.hits
-      if (hits.length === 0) {
+      try {
+        const hits = response.data.hits;
+        if (hits.length === 0) {
          Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
        }
      
       clearPage();
     
       renderCardMarkup(hits);
-  
-    }).finally(form.reset());
+      } catch (error) {
+         console.log(error);
+    Notiflix.Notify.failure('Error, something went wrong');
+       }
+      }).finally(form.reset());
 
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    Notiflix.Notify.failure('Error, something went wrong');
   }
-
-  
-  
 }
 
 function clearPage() {
