@@ -6,7 +6,7 @@ export class apiServer {
       this.serchQuery = '';
       this.page = 1;
    }
-  async fetch() {
+  async fetchAxios() {
       this.incrementPage();
         return await axios.get('https://pixabay.com/api/?key=24625422-32b02834f3df76db1a58654ff', {
       params: {

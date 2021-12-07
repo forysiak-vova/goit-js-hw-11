@@ -22,14 +22,15 @@ form.addEventListener('submit', onFormSubmit);
 function onFormSubmit(e) {
   e.preventDefault();
   ApiServer.serchQuery = e.currentTarget.elements.searchQuery.value;
-
-  try {
-    if (ApiServer.serchQuery === '') {
-      Notiflix.Notify.failure('please, enter text')
+  
+  if (ApiServer.serchQuery === '') {
+      Notiflix.Notify.failure('please, enter text!!!')
       return;
-    }
+  };
+
+
     ApiServer.resetPage();
-    ApiServer.fetch().then(response => {
+    ApiServer.fetchAxios().then(response => {
       try {
         const hits = response.data.hits;
         if (hits.length === 0) {
@@ -45,10 +46,8 @@ function onFormSubmit(e) {
        }
       }).finally(form.reset());
 
-  } catch (error) {
-    console.log(error);
-    Notiflix.Notify.failure('Error, something went wrong');
-  }
+ 
+  clearPage();
 }
 
 function clearPage() {
@@ -65,7 +64,7 @@ const onEntry = entries => {
      
     entries.forEach(entry => {
         if (entry.isIntersecting && ApiServer.serchQuery !== '') {
-          ApiServer.fetch().then(response => {
+          ApiServer.fetchAxios().then(response => {
             const hits = response.data.hits
             renderCardMarkup(hits);
             
