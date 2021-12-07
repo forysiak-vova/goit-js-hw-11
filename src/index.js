@@ -29,24 +29,30 @@ function onFormSubmit(e) {
   };
 
 
-    ApiServer.resetPage();
-    ApiServer.fetchAxios().then(response => {
-      try {
-        const hits = response.data.hits;
-        if (hits.length === 0) {
-         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
-       }
+  ApiServer.resetPage();
+
+  
+  
+  ApiServer.fetchAxios().then(response => {
+    
+    try {
+      const hits = response.data.hits;
+      if (hits.length === 0) {
+        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+      }
      
       clearPage();
     
       renderCardMarkup(hits);
-      } catch (error) {
-         console.log(error);
-    Notiflix.Notify.failure('Error, something went wrong');
-       }
-      }).finally(form.reset());
+    } catch (error) {
+      console.log(error);
+      Notiflix.Notify.failure('Error, something went wrong');
+    }
+    
+  });
 
- 
+
+  form.reset()
   clearPage();
 }
 
