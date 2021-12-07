@@ -1,11 +1,11 @@
 import './sass/main.scss';
 import Notiflix from 'notiflix';
 import renderCard  from './templase/markup.hbs';
-import {imageOfLightbox} from './js/lightbox.js';
+// import {imageOfLightbox} from './js/lightbox.js';
 import  {apiServer} from './js/apiServer.js'
 // import axios from 'axios';
-// import SimpleLightbox from 'simplelightbox';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 
 const ApiServer = new apiServer();
@@ -31,28 +31,29 @@ function onFormSubmit(e) {
 
   ApiServer.resetPage();
 
-  
+
   
   ApiServer.fetchAxios().then(response => {
-    
+
     try {
       const hits = response.data.hits;
       if (hits.length === 0) {
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
       }
-     
+    
+       
       renderCardMarkup(hits);
-      
+
     } catch (error) {
       console.log(error);
       Notiflix.Notify.failure('Error, something went wrong');
     }
 
-  });
+  }).finally(form.reset());
 
-
-  form.reset()
   clearPage();
+
+  
 }
 
 function clearPage() {
@@ -61,31 +62,38 @@ function clearPage() {
 
 function renderCardMarkup(response) {
   gallery.insertAdjacentHTML('beforeend', renderCard(response));
-  imageOfLightbox();
+  // imageOfLightbox().refresh();
+  lightbox.refresh();
 }
 
 
 const onEntry = entries => {
-     
-    entries.forEach(entry => {
+      entries.forEach(entry => {
         if (entry.isIntersecting && ApiServer.serchQuery !== '') {
           ApiServer.fetchAxios().then(response => {
             const hits = response.data.hits
-            renderCardMarkup(hits);
-            
+             renderCardMarkup(hits);
           })
         }
     });
 }
 const options = {
-    rootMargin: '200px'
+  rootMargin: '200px'
 }
 
 
 const observer = new IntersectionObserver(onEntry, options)
 
-observer.observe(divEl)
+observer.observe(divEl);
 
+ const lightbox = new SimpleLightbox(".gallery a", {
+  captionSelector: "img", 
+  // captionsData: "alt", 
+  captionPosition: "bottom", 
+  captionDelay: 250, 
+  showCounter: false, 
+  scrollZoom: false, 
+    });
 
 
 
