@@ -41,14 +41,13 @@ function onFormSubmit(e) {
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
       }
      
-      clearPage();
-    
       renderCardMarkup(hits);
+      
     } catch (error) {
       console.log(error);
       Notiflix.Notify.failure('Error, something went wrong');
     }
-    
+
   });
 
 
